@@ -57,9 +57,16 @@ router.get("/users/:userId", (req, res) => {
 // Update a user
 router.put("/users/:userId", (req, res) => {
   const { userId } = req.params;
-  const { name, email, age } = req.body;
+  const { name, lastName, email, password, age } = req.body;
+  const hash = bcrypt.hashSync(password, 10);
   userSchema
-    .updateOne({ _id: userId }, { $set: { name, email, age } })
+    .updateOne({ _id: userId }, { $set: {
+      name: name,
+      lastName: lastName,
+      email: email,
+      password: hash,
+      age: age,
+    } })
     .then((data) => {
       res.json(data);
     })

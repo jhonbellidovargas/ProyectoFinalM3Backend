@@ -11,7 +11,7 @@ const port = process.env.PORT || 9000;
 
 //Middleware
 app.use(express.json());
-// Permiti que se conecte a la API desde cualquier origen
+// Permitir que se conecte a la API desde cualquier origen
 const corsOptions = {
   origin: "*",
   optionsSuccessStatus: 200,
