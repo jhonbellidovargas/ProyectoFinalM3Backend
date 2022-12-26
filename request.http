@@ -5,7 +5,7 @@ Content-Type: application/json
 {
   "name": "Jhon",
   "lastName": "Doe",
-  "email": "correo@gmail.com",
+  "email": "jhon12@gmail.com",
   "password": "123456",
   "age": 25
 }
@@ -80,3 +80,12 @@ PUT http://localhost:9000/api/favorites/63a9dc35cd28a6e8b563ba05 HTTP/1.1
 DELETE http://localhost:9000/api/favorites/63a5c5950f6de97bbd8dafe1 HTTP/1.1
 Content-Type: application/json
 
+// Login
+###
+POST http://localhost:9000/api/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "jhon12@gmail.com",
+  "password": "123456"
+}

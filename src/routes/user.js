@@ -1,11 +1,19 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcrypt");
 
 const userSchema = require("../models/user");
 
 // Create a new user
 router.post("/users", (req, res) => {
-  const user = new userSchema(req.body);
+  const hash = bcrypt.hashSync(req.body.password, 10);
+  const user = new userSchema({
+    name: req.body.name,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    password: hash,
+    age: req.body.age,
+  });
   user
     .save()
     .then((data) => {
