@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 require("dotenv").config();
 const userRoutes = require("./routes/user");
 const favoriteRoutes = require("./routes/favorite");
@@ -10,9 +11,15 @@ const port = process.env.PORT || 9000;
 
 //Middleware
 app.use(express.json());
-app.use('/api', userRoutes);
-app.use('/api', favoriteRoutes);
-app.use('/api', loginRoutes);
+// Permiti que se conecte a la API desde cualquier origen
+const corsOptions = {
+  origin: "*",
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+app.use("/api", userRoutes);
+app.use("/api", favoriteRoutes);
+app.use("/api", loginRoutes);
 //Routes
 app.get("/", (req, res) => {
   res.send("Hello World!");
