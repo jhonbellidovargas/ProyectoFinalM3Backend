@@ -9,19 +9,24 @@ router.post("/users", (req, res) => {
   const hash = bcrypt.hashSync(req.body.password, 10);
   const user = new userSchema({
     name: req.body.name,
-    lastName: req.body.lastName,
     email: req.body.email,
+    userName: req.body.userName,
     password: hash,
-    age: req.body.age,
   });
   user
     .save()
     .then((data) => {
-      res.json(data);
+      if (data.keyPattern) {
+        res.json({
+          message: "Username or email already exists",
+        });
+      } else {
+        res.json(data);
+      }
     })
     .catch((error) => {
       res.json({
-        message: error,
+        message: error.message,
       });
     });
 });
@@ -35,7 +40,7 @@ router.get("/users", (req, res) => {
     })
     .catch((error) => {
       res.json({
-        message: error,
+        message: error.message,
       });
     });
 });
@@ -49,7 +54,7 @@ router.get("/users/:userId", (req, res) => {
     })
     .catch((error) => {
       res.json({
-        message: error,
+        message: error.message,
       });
     });
 });
@@ -57,22 +62,27 @@ router.get("/users/:userId", (req, res) => {
 // Update a user
 router.put("/users/:userId", (req, res) => {
   const { userId } = req.params;
-  const { name, lastName, email, password, age } = req.body;
+  const { name, email, userName, password} = req.body;
   const hash = bcrypt.hashSync(password, 10);
   userSchema
     .updateOne({ _id: userId }, { $set: {
       name: name,
-      lastName: lastName,
       email: email,
-      password: hash,
-      age: age,
+      userName: userName,
+      password: hash
     } })
     .then((data) => {
-      res.json(data);
+      if (data.keyPattern) {
+        res.json({
+          message: "Username or email already exists",
+        });
+      } else {
+        res.json(data);
+      }
     })
     .catch((error) => {
       res.json({
-        message: error,
+        message: error.message,
       });
     });
 });
@@ -86,7 +96,7 @@ router.delete("/users/:userId", (req, res) => {
     })
     .catch((error) => {
       res.json({
-        message: error,
+        message: error.message,
       });
     });
 });

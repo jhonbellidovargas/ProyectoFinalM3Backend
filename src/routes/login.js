@@ -4,9 +4,9 @@ const userSchema = require("../models/user");
 const bcrypt = require('bcrypt');
 
 router.post("/login", (req, res) => {
-  const { email, password } = req.body;
+  const { userName, password } = req.body;
   userSchema
-    .findOne({email : email})
+    .findOne({userName : userName})
     .then((user) => {
       console.log(password);
       console.log(user.password);
@@ -16,9 +16,8 @@ router.post("/login", (req, res) => {
         const userResp = {
           id: user._id,
           name: user.name,
-          lastName: user.lastName,
-          email: user.email,
-          age: user.age,
+          userName: user.userName,
+          createdAt: user.createdAt,
         };
         res.send(userResp);
       } else {
@@ -26,8 +25,9 @@ router.post("/login", (req, res) => {
       }
     })
     .catch((err) => {
-      console.log(err);
-      res.send("User not found");
+      res.send(
+        "User not found"
+      );
     });
 });
 

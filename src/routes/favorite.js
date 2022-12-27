@@ -5,16 +5,21 @@ const userSchema = require("../models/user");
 const favoriteSchema = require("../models/favorite");
 
 // Create a new
-router.post("/favorites", (req, res) => {
+router.post("/favorites", async (req, res) => {
   const favorite = new favoriteSchema(req.body);
   favorite
     .save()
     .then((data) => {
-      res.json(data);
+      console.log(data);
+      if (data.keyPattern) {
+        res.send("Pokemon ya esta en favoritos");
+      } else {
+        res.json(data);
+      }
     })
     .catch((error) => {
       res.json({
-        message: error,
+        message: error.message
       });
     });
 });
@@ -28,7 +33,7 @@ router.get("/favorites", (req, res) => {
     })
     .catch((error) => {
       res.json({
-        message: error,
+        message: error.message,
       });
     });
 });
@@ -52,7 +57,7 @@ router.get("/favorites/:userId", (req, res) => {
       })
       .catch((error) => {
         res.json({
-          message: error,
+          message: error.message,
         });
       });
   }
@@ -77,7 +82,7 @@ router.put("/favorites/:id", (req, res) => {
     })
     .catch((error) => {
       res.json({
-        message: error,
+        message: error.message,
       });
     });
 });
@@ -94,7 +99,7 @@ router.delete("/favorites/:favoriteId", (req, res) => {
     })
     .catch((error) => {
       res.json({
-        message: error,
+        message: error.message,
       });
     });
 });

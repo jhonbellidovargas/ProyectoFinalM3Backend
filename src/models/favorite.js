@@ -8,6 +8,7 @@ const favoriteSchema = new mongoose.Schema({
   pokemon: {
     type: Object,
     required: true,
+    unique: true,
   }
 });
 
