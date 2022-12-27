@@ -18,6 +18,7 @@ router.post("/login", (req, res) => {
           name: user.name,
           userName: user.userName,
           createdAt: user.createdAt,
+          email: user.email,
         };
         res.send(userResp);
       } else {

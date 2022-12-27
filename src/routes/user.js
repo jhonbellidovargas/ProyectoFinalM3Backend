@@ -21,7 +21,13 @@ router.post("/users", (req, res) => {
           message: "Username or email already exists",
         });
       } else {
-        res.json(data);
+        return res.json({
+          id: data._id,
+          name: data.name,
+          userName: data.userName,
+          createdAt: data.createdAt,
+          email: data.email
+        })
       }
     })
     .catch((error) => {
