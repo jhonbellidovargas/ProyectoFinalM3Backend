@@ -26,8 +26,8 @@ router.post("/users", (req, res) => {
           name: data.name,
           userName: data.userName,
           createdAt: data.createdAt,
-          email: data.email
-        })
+          email: data.email,
+        });
       }
     })
     .catch((error) => {
@@ -68,29 +68,65 @@ router.get("/users/:userId", (req, res) => {
 // Update a user
 router.put("/users/:userId", (req, res) => {
   const { userId } = req.params;
-  const { name, email, userName, password} = req.body;
-  const hash = bcrypt.hashSync(password, 10);
-  userSchema
-    .updateOne({ _id: userId }, { $set: {
-      name: name,
-      email: email,
-      userName: userName,
-      password: hash
-    } })
-    .then((data) => {
-      if (data.keyPattern) {
+  const { name, email, userName, password } = req.body;
+  // si no se envía password, se mantiene el mismo
+  if (!password) {
+    userSchema
+      .updateOne(
+        { _id: userId },
+        {
+          $set: {
+            name: name,
+            email: email,
+            userName: userName,
+          },
+        }
+      )
+      .then((data) => {
+        if (data.keyPattern) {
+          res.json({
+            message: "Username or email already exists",
+          });
+        } else {
+          res.json(data);
+        }
+      })
+      .catch((error) => {
         res.json({
-          message: "Username or email already exists",
+          message: error.message,
         });
-      } else {
-        res.json(data);
-      }
-    })
-    .catch((error) => {
-      res.json({
-        message: error.message,
       });
-    });
+    return;
+  } else {
+    const hash = bcrypt.hashSync(password, 10);
+
+    userSchema
+      .updateOne(
+        { _id: userId },
+        {
+          $set: {
+            name: name,
+            email: email,
+            userName: userName,
+            password: hash,
+          },
+        }
+      )
+      .then((data) => {
+        if (data.keyPattern) {
+          res.json({
+            message: "Username or email already exists",
+          });
+        } else {
+          res.json(data);
+        }
+      })
+      .catch((error) => {
+        res.json({
+          message: error.message,
+        });
+      });
+  }
 });
 
 // Delete a user
