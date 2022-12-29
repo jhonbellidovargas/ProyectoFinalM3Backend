@@ -14,6 +14,7 @@ router.post("/favorites", async (req, res) => {
       if (data.keyPattern) {
         res.send("Pokemon ya esta en favoritos");
       } else {
+        console.log("Pokemon agregado a favoritos");
         res.json(data);
       }
     })
